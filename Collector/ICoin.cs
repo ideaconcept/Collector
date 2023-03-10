@@ -17,12 +17,7 @@ namespace Collector
         void AddQuanity(float grade);
         void AddQuanity(string grade);
 
-        void AddQuotation(float grade);
-        void AddQuotation(string grade);
-
- //       event CatalogAddDelegate CatalogAdded;
- //       event QuotationAddDelegate QuotationAdded;
- //       event CollectionUpdateDelegate CollectionUpdate;
+        event CollectionUpdateDelegate CollectionUpdate;
 
         Statistics GetStatistics();
     }
