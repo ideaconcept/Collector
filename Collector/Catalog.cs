@@ -1,16 +1,61 @@
-﻿namespace Collector
+﻿using System.Runtime.CompilerServices;
+
+namespace Collector
 {
     internal class Catalog : CatalogBase
     {
         public override event CatalogAddDelegate CatalogAdded;
         public override event QuotationAddDelegate QuotationAdded;
-        
+
+        private const string fileNameCatalog = "catalog.txt";
         public Catalog(string id,
                        string name,
                        string year,
                        string publisher)
             : base(id, name, year, publisher)
         {
+        }
+
+        public static void ShowCatalog()
+        {
+            if (File.Exists(fileNameCatalog))
+            {
+
+                using (var reader = File.OpenText(fileNameCatalog))
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.Write("\nWykaz dostępnych katalogów wycen monet:\n\n");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.Write("\tLp.\tNazwa\t\t\t\t\tRok\tWydawca\n");
+                    Console.WriteLine(("\t").PadRight(65, '-'));
+                    Console.ResetColor();
+
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        var record = line.Split(';');
+
+                        foreach (var kv in record)
+                        {
+                            Console.Write($"\t{kv}");
+                        }
+                        line = reader.ReadLine();
+                        Console.WriteLine("");
+                    }
+                    Console.WriteLine("\n");
+                }
+            }
+            else
+            {
+                //Opercja "wdrożeniowa" dla pierwszego uruchomienia funkcji aplikacji.
+                //Dodanie do słownika katalogów jednego katalogu i jego wyceny.
+                using (var writer = File.AppendText(fileNameCatalog))
+                {
+                    writer.WriteLine("1;Katalog polskich monet obiegowych;2019;Fischer");
+                }
+                ShowCatalog();
+                //Dopisać jeszcze kod dodania wycen dla pierwszego katalogu
+            }
         }
 
         public override void AddQuotation(float quotation)
