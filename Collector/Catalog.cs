@@ -2,7 +2,7 @@
 
 namespace Collector
 {
-    internal class Catalog : CatalogBase
+    public class Catalog : CatalogBase
     {
         public override event CatalogAddDelegate CatalogAdded;
         public override event QuotationAddDelegate QuotationAdded;
@@ -20,7 +20,6 @@ namespace Collector
         {
             if (File.Exists(fileNameCatalog))
             {
-
                 using (var reader = File.OpenText(fileNameCatalog))
                 {
                     Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -44,17 +43,6 @@ namespace Collector
                     }
                     Console.WriteLine("\n");
                 }
-            }
-            else
-            {
-                //Opercja "wdrożeniowa" dla pierwszego uruchomienia funkcji aplikacji.
-                //Dodanie do słownika katalogów jednego katalogu i jego wyceny.
-                using (var writer = File.AppendText(fileNameCatalog))
-                {
-                    writer.WriteLine("1;Katalog polskich monet obiegowych;2019;Fischer");
-                }
-                ShowCatalog();
-                //Dopisać jeszcze kod dodania wycen dla pierwszego katalogu
             }
         }
 

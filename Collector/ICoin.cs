@@ -9,7 +9,6 @@ namespace Collector
         public int Denomination { get; }
         public string Currency { get;  }
         public int YearOfRelease { get; }
-        public int Mintage { get; }
         public int Diameter { get; }
         public int Weight { get; }
         public string Material { get; }

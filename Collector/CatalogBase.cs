@@ -15,6 +15,7 @@
             this.Year = year;
             this.Publisher = publisher;
         }
+
         public string ID { get;  }
         public string Name { get; }
         public string Year { get; }

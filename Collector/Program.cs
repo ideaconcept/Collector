@@ -2,12 +2,14 @@
 using System;
 using System.Diagnostics;
 
-var coin = new Coin("id1", "nazwa1", 100, "Złoty", 2016, 10, 10, 5, "CU");
+var coin = new Coin("id1", "nazwa1", 100, "Złoty", 2016, 10, 5, "CU");
 var catalog = new Catalog("id1", "Katalog polskich monet obiegowych", "2015", "Fischer");
 
 coin.CollectionUpdate += CollectionUpdate;
 catalog.CatalogAdded += CatalogAdded;
 catalog.QuotationAdded += QuotationAdded;
+
+Implementation.implementation();
 
 static void CatalogAdded(object sender, EventArgs args)
 {
@@ -25,14 +27,20 @@ static void CollectionUpdate(object sender, EventArgs args)
 Console.WriteLine("                  Witamy w programie Kolekcjoner:");
 Console.WriteLine("====================================================================\n");
 Console.WriteLine("Wybierz jedną z poniższych opcji lub X aby zakończyć pracę programu:\n");
-Console.WriteLine("   1. Wyświetl zasób posiadanej kolekcji (Niekatywne)");
+Console.ForegroundColor = ConsoleColor.Green;
+Console.WriteLine("   1. Wyświetl zasób posiadanej kolekcji");
+Console.ResetColor();
 Console.WriteLine("   2. Zaktualizuj ilość posiadanych numizmatów (Niekatywne)");
-Console.WriteLine("   3. Wyświetl listę dostępnych katalogów wycen monet");
+Console.ForegroundColor = ConsoleColor.Green;
+Console.WriteLine("   3. Wyświetl listę dostępnych katalogów wycen");
+Console.ResetColor();
 Console.WriteLine("   4. Wprowadź nowy katalog wyceny monet (Niekatywne)");
 Console.WriteLine("   5. Oblicz wartość kolekcji (Niekatywne)");
 Console.WriteLine("   6. Wyświetl informacje nt. zmian wartości kolekcji (Niekatywne)");
 Console.WriteLine("   7. Wyświetl dane statystyczne nt. posiadanych monet (Niekatywne)");
+Console.ForegroundColor = ConsoleColor.Green;
 Console.WriteLine("   X. Zakończ pracę programu\n");
+Console.ResetColor();
 
 
 while (true)
@@ -47,7 +55,7 @@ while (true)
 
     if (choice == "1")
     {
-   
+        Coin.ShowCollection();
     }
     else if (choice == "2")
     {
