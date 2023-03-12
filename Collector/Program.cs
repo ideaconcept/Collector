@@ -33,15 +33,14 @@ Console.ResetColor();
 Console.WriteLine("   2. Zaktualizuj ilość posiadanych numizmatów (Niekatywne)");
 Console.ForegroundColor = ConsoleColor.Green;
 Console.WriteLine("   3. Wyświetl listę dostępnych katalogów wycen");
+Console.WriteLine("   4. Wprowadź nowy katalog wyceny monet");
 Console.ResetColor();
-Console.WriteLine("   4. Wprowadź nowy katalog wyceny monet (Niekatywne)");
 Console.WriteLine("   5. Oblicz wartość kolekcji (Niekatywne)");
 Console.WriteLine("   6. Wyświetl informacje nt. zmian wartości kolekcji (Niekatywne)");
 Console.WriteLine("   7. Wyświetl dane statystyczne nt. posiadanych monet (Niekatywne)");
 Console.ForegroundColor = ConsoleColor.Green;
 Console.WriteLine("   X. Zakończ pracę programu\n");
 Console.ResetColor();
-
 
 while (true)
 {
@@ -67,12 +66,35 @@ while (true)
     }
     else if (choice == "4")
     {
-        catalog.AddQuotation(3);
+        Console.WriteLine("\nDodać opis czynności\n");
+
+        Console.WriteLine("Wprowadź dane katalogu: ");
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("Nazwa: ");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        var nameCatalog = Console.ReadLine();
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("Rok wydania: ");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        var yearCatalog = Console.ReadLine();
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("Nazwa: ");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        var publisherName = Console.ReadLine();
+
+        Console.ResetColor();
+        Console.WriteLine("\n");
+
+        var record = nameCatalog + ";" + yearCatalog + ";" + publisherName;
+        catalog.AddCatalog(record);
     }
     else if (choice == "5") { }
     else if (choice == "6") { }
     else if (choice == "7") { }
-    else if (choice == "X" || (choice == "x"))
+    else if (choice == "X" || choice == "x")
     {
         Environment.Exit(0);
     }

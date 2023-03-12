@@ -8,6 +8,7 @@ namespace Collector
         public override event QuotationAddDelegate QuotationAdded;
 
         private const string fileNameCatalog = "catalog.txt";
+
         public Catalog(string id,
                        string name,
                        string year,
@@ -46,6 +47,21 @@ namespace Collector
             }
         }
 
+        public override void AddCatalog(string catalogData)
+        {
+            if (File.Exists(fileNameCatalog))
+            {
+                using (var writer = File.AppendText(fileNameCatalog))
+                {
+                    writer.WriteLine(catalogData);
+                }
+            }
+            if (CatalogAdded != null)
+            {
+                CatalogAdded(this, new EventArgs());
+            }
+        }
+
         public override void AddQuotation(float quotation)
         {
             if (QuotationAdded != null)
@@ -70,5 +86,6 @@ namespace Collector
                 CatalogAdded(this, new EventArgs());
             }
         }
+
     }
 }

@@ -25,5 +25,7 @@
         public abstract void AddQuotation(float grade);
 
         public abstract void AddQuotation(string grade);
+
+        public abstract void AddCatalog(string catalogData);
     }
 }

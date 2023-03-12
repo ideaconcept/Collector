@@ -11,6 +11,7 @@ namespace Collector
 
         void AddQuotation(float grade);
         void AddQuotation(string grade);
+        void AddCatalog(string catalogData);
 
         event CatalogAddDelegate CatalogAdded;
         event QuotationAddDelegate QuotationAdded;
