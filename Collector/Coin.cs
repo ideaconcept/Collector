@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 
 namespace Collector
@@ -28,24 +29,24 @@ namespace Collector
             List<string[]> coinTable = new List<string[]>();
             if (File.Exists(fileNameCoinsList))
             {
-                using (var reader2 = File.OpenText(fileNameCoinsList))
+                using (var reader = File.OpenText(fileNameCoinsList))
                 {
-                    var line2 = reader2.ReadLine();
-                    while (line2 != null)
+                    var line = reader.ReadLine();
+                    while (line != null)
                     {
-                        var dictionary = line2.Split(';');
+                        var dictionary = line.Split(';');
                         coinTable.Add(dictionary);
-                        line2 = reader2.ReadLine();
+                        line = reader.ReadLine();
                     }
                 }
             }
 
-            //Odczytania danych kolekcji, uzupełnienie danych opisujących monety ze słownika i wyświetlenie
+            //Odczytania danych kolekcji, uzupełnienie ze słownika danych opisujących monety i wyświetlenie
             if (File.Exists(fileNameCollection))
             {
                 using (var reader = File.OpenText(fileNameCollection))
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("\nZawartość Twojej kolekcji:\n\n");
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
 
@@ -74,7 +75,7 @@ namespace Collector
             }
         }
 
-        public override void AddQuanity(float quanity)
+        public override void AddQuanity(string id, float quanity)
         {
             if (CollectionUpdate != null)
             {
@@ -82,15 +83,15 @@ namespace Collector
             }
         }
 
-        public override void AddQuanity(string quanity)
+        public override void AddQuanity(string id, string quanity)
         {
             if (float.TryParse(quanity, out float result))
             {
-                this.AddQuanity(result);
+                this.AddQuanity(id, result);
             }
             else
             {
-                throw new Exception("Wprowadzona ilość nie jest dopuszczalną wartością.\n");
+                throw new Exception("Wprowadzona ilość nie jest dopuszczalną wartością lub nie jest cyfrą.\n");
             }
         }
 
@@ -99,5 +100,27 @@ namespace Collector
             var statistics = new Statistics();
             return statistics;
         }
+
+        public static void ModifyRecord(string fileName, string oldData, string newData)
+        {
+            int lineNumber = 0;
+            bool traced = false;
+            string[] textLine = System.IO.File.ReadAllLines(fileName);
+            for (int i = 0; i < textLine.Length; i++)
+            {
+                if (textLine[i].Contains(oldData))
+                {
+                    traced = true;
+                }
+                if (traced is true)
+                    if (textLine[i].Contains(oldData))
+                    {
+                        textLine[i] = newData;
+                        traced = false;
+                        System.IO.File.WriteAllLines(fileName, textLine);
+                        break;
+                    }
+            }
+        }   
     }
 }

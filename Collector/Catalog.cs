@@ -23,7 +23,7 @@ namespace Collector
             {
                 using (var reader = File.OpenText(fileNameCatalog))
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("\nWykaz dostępnych katalogów wycen monet:\n\n");
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.Write("\tLp.\tNazwa\t\t\t\t\tRok\tWydawca\n");
@@ -34,7 +34,6 @@ namespace Collector
                     while (line != null)
                     {
                         var record = line.Split(';');
-
                         foreach (var kv in record)
                         {
                             Console.Write($"\t{kv}");
@@ -54,6 +53,7 @@ namespace Collector
                 using (var writer = File.AppendText(fileNameCatalog))
                 {
                     writer.WriteLine(catalogData);
+                    writer.WriteLineAsync();
                 }
             }
             if (CatalogAdded != null)

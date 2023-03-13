@@ -7,7 +7,7 @@
         private const string fileNameCoinsList = "coins.txt";
 
         //Opercja "wdrożeniowa" dla pierwszego uruchomienia funkcji aplikacji.
-        public static void implementation()
+        public static void Implementations()
         {
             //Dodanie do słownika katalogów jednego katalogu i jego wyceny.
             if (File.Exists(fileNameCatalog))
@@ -15,11 +15,19 @@
             }
             else
             {
+                //Katalog
                 using (var writer = File.AppendText(fileNameCatalog))
                 {
                     writer.WriteLine("1;Katalog polskich monet obiegowych;2019;Fischer");
                 }
-                //Dopisać jeszcze kod dodania wycen dla pierwszego katalogu
+                //Wyceny numizmatów
+                using (var writer = File.AppendText("catalog_1.txt"))
+                {
+                    writer.WriteLine("K(10)130;100");
+                    writer.WriteLine("K(20)006;130");
+                    writer.WriteLine("K(50)001;200");
+                    writer.WriteLine("OB(2)221;4");
+                }
             }
 
             //Utworzenie zasobu słownika monet
@@ -43,10 +51,13 @@
             }
             else
             {
-                //using (var writer = File.AppendText(fileNameCollection))
-                //{
-
-                //}
+                using (var writer = File.AppendText(fileNameCollection))
+                {
+                    writer.WriteLine("K(10)130;0");
+                    writer.WriteLine("K(20)006;0");
+                    writer.WriteLine("K(50)001;0");
+                    writer.WriteLine("OB(2)221;0");
+                }
             }
         }
     }
