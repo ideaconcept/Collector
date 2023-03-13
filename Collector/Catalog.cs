@@ -7,8 +7,6 @@ namespace Collector
         public override event CatalogAddDelegate CatalogAdded;
         public override event QuotationAddDelegate QuotationAdded;
 
-        private const string fileNameCatalog = "catalog.txt";
-
         public Catalog(string id,
                        string name,
                        string year,
@@ -19,9 +17,9 @@ namespace Collector
 
         public static void ShowCatalog()
         {
-            if (File.Exists(fileNameCatalog))
+            if (File.Exists(Program.fileNameCatalog))
             {
-                using (var reader = File.OpenText(fileNameCatalog))
+                using (var reader = File.OpenText(Program.fileNameCatalog))
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("\nWykaz dostępnych katalogów wycen monet:\n\n");
@@ -48,9 +46,9 @@ namespace Collector
 
         public override void AddCatalog(string catalogData)
         {
-            if (File.Exists(fileNameCatalog))
+            if (File.Exists(Program.fileNameCatalog))
             {
-                using (var writer = File.AppendText(fileNameCatalog))
+                using (var writer = File.AppendText(Program.fileNameCatalog))
                 {
                     writer.WriteLine(catalogData);
                     writer.WriteLineAsync();
@@ -86,6 +84,5 @@ namespace Collector
                 CatalogAdded(this, new EventArgs());
             }
         }
-
     }
 }

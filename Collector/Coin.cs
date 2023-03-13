@@ -8,8 +8,7 @@ namespace Collector
     {
         public override event CollectionUpdateDelegate CollectionUpdate;
 
-        private const string fileNameCollection = "collection.txt";
-        private const string fileNameCoinsList = "coins.txt";
+        public List<string[]> coinTable = new List<string[]>();
 
         public Coin(string id,
                     string name,
@@ -23,28 +22,13 @@ namespace Collector
         {
         }
 
-        public static void ShowCollection()
+        public static void ShowCollection(List<string[]> coinTable)
         {
-            //Załadowanie słownika monet do listy
-            List<string[]> coinTable = new List<string[]>();
-            if (File.Exists(fileNameCoinsList))
-            {
-                using (var reader = File.OpenText(fileNameCoinsList))
-                {
-                    var line = reader.ReadLine();
-                    while (line != null)
-                    {
-                        var dictionary = line.Split(';');
-                        coinTable.Add(dictionary);
-                        line = reader.ReadLine();
-                    }
-                }
-            }
 
             //Odczytania danych kolekcji, uzupełnienie ze słownika danych opisujących monety i wyświetlenie
-            if (File.Exists(fileNameCollection))
+            if (File.Exists(Program.fileNameCollection))
             {
-                using (var reader = File.OpenText(fileNameCollection))
+                using (var reader = File.OpenText(Program.fileNameCollection))
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("\nZawartość Twojej kolekcji:\n\n");
@@ -113,6 +97,7 @@ namespace Collector
                     traced = true;
                 }
                 if (traced is true)
+                {
                     if (textLine[i].Contains(oldData))
                     {
                         textLine[i] = newData;
@@ -120,7 +105,27 @@ namespace Collector
                         System.IO.File.WriteAllLines(fileName, textLine);
                         break;
                     }
+                }
             }
-        }   
+        }
+        public static List<string[]> GetCatalog()
+        {
+            //Załadowanie słownika monet do listy
+            List<string[]> coinTable = new List<string[]>();
+            if (File.Exists(Program.fileNameCoinsList))
+            {
+                using (var reader = File.OpenText(Program.fileNameCoinsList))
+                {
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        var dictionary = line.Split(';');
+                        coinTable.Add(dictionary);
+                        line = reader.ReadLine();
+                    }
+                }
+            }
+            return coinTable;
+        }
     }
 }
