@@ -15,35 +15,6 @@ namespace Collector
         {
         }
 
-        public static void ShowCatalog()
-        {
-            if (File.Exists(Program.fileNameCatalog))
-            {
-                using (var reader = File.OpenText(Program.fileNameCatalog))
-                {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.Write("\nWykaz dostępnych katalogów wycen monet:\n\n");
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.Write("\tLp.\tNazwa\t\t\t\t\tRok\tWydawca\n");
-                    Console.WriteLine(("\t").PadRight(65, '-'));
-                    Console.ResetColor();
-
-                    var line = reader.ReadLine();
-                    while (line != null)
-                    {
-                        var record = line.Split(';');
-                        foreach (var kv in record)
-                        {
-                            Console.Write($"\t{kv}");
-                        }
-                        line = reader.ReadLine();
-                        Console.WriteLine("");
-                    }
-                    Console.WriteLine("\n");
-                }
-            }
-        }
-
         public override void AddCatalog(string catalogData)
         {
             if (File.Exists(Program.fileNameCatalog))
@@ -82,6 +53,34 @@ namespace Collector
             if (CatalogAdded != null)
             {
                 CatalogAdded(this, new EventArgs());
+            }
+        }
+        public static void ShowCatalog()
+        {
+            if (File.Exists(Program.fileNameCatalog))
+            {
+                using (var reader = File.OpenText(Program.fileNameCatalog))
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write("\nWykaz dostępnych katalogów wycen monet:\n\n");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.Write("\tLp.\tNazwa\t\t\t\t\tRok\tWydawca\n");
+                    Console.WriteLine(("\t").PadRight(65, '-'));
+                    Console.ResetColor();
+
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        var record = line.Split(';');
+                        foreach (var kv in record)
+                        {
+                            Console.Write($"\t{kv}");
+                        }
+                        line = reader.ReadLine();
+                        Console.WriteLine("");
+                    }
+                    Console.WriteLine("\n");
+                }
             }
         }
     }

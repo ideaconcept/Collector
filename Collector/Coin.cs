@@ -22,6 +22,32 @@ namespace Collector
         {
         }
 
+        public override void AddQuanity(string id, float quanity)
+        {          
+            if (CollectionUpdate != null)
+            {
+                CollectionUpdate(this, new EventArgs());
+            }
+        }
+
+        public override void AddQuanity(string id, string quanity)
+        {
+            if (float.TryParse(quanity, out float result))
+            {
+                this.AddQuanity(id, result);
+            }
+            else
+            {
+                throw new Exception("Wprowadzona ilość nie jest dopuszczalną wartością lub nie jest cyfrą.\n");
+            }
+        }
+
+        public override Statistics GetStatistics()
+        {
+            var statistics = new Statistics();
+            return statistics;
+        }
+
         public static void ShowCollection(List<string[]> coinTable)
         {
 
@@ -59,32 +85,6 @@ namespace Collector
             }
         }
 
-        public override void AddQuanity(string id, float quanity)
-        {
-            if (CollectionUpdate != null)
-            {
-                CollectionUpdate(this, new EventArgs());
-            }
-        }
-
-        public override void AddQuanity(string id, string quanity)
-        {
-            if (float.TryParse(quanity, out float result))
-            {
-                this.AddQuanity(id, result);
-            }
-            else
-            {
-                throw new Exception("Wprowadzona ilość nie jest dopuszczalną wartością lub nie jest cyfrą.\n");
-            }
-        }
-
-        public override Statistics GetStatistics()
-        {
-            var statistics = new Statistics();
-            return statistics;
-        }
-
         public static void ModifyRecord(string fileName, string oldData, string newData)
         {
             int lineNumber = 0;
@@ -108,9 +108,10 @@ namespace Collector
                 }
             }
         }
+
         public static List<string[]> GetCatalog()
         {
-            //Załadowanie słownika monet do listy
+            //Załadowanie słownika monet do tablicy
             List<string[]> coinTable = new List<string[]>();
             if (File.Exists(Program.fileNameCoinsList))
             {
@@ -126,6 +127,26 @@ namespace Collector
                 }
             }
             return coinTable;
+        }
+        
+        public static List<string[]> GetCollection()
+        {
+            //Załadowanie kolekcji monet do tablicy
+            List<string[]> coinCollection = new List<string[]>();
+            if (File.Exists(Program.fileNameCollection))
+            {
+                using (var reader = File.OpenText(Program.fileNameCollection))
+                {
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        var dictionary = line.Split(';');
+                        coinCollection.Add(dictionary);
+                        line = reader.ReadLine();
+                    }
+                }
+            }
+            return coinCollection;
         }
     }
 }
