@@ -6,7 +6,7 @@
         private const string fileNameCollection = "collection.txt";
         private const string fileNameCoinsList = "coins.txt";
 
-        //Opercja "wdrożeniowa" dla pierwszego uruchomienia funkcji aplikacji.
+        //Opercja "wdrożeniowa" dla pierwszego uruchomienia aplikacji.
         public static void Implementations()
         {
             //Dodanie do słownika katalogów jednego katalogu i jego wyceny.

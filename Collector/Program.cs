@@ -12,7 +12,6 @@ namespace Collector
         public const string fileNameCollection = "collection.txt";
         public const string fileNameCoinsList = "coins.txt";
         public const string fileNameCatalog = "catalog.txt";
-        //private static string newValue;
 
         static void CatalogAdded(object sender, EventArgs args)
         {
@@ -51,12 +50,12 @@ namespace Collector
                 string choice = Console.ReadLine();
                 Console.ResetColor();
 
-                if (choice == "1")
+                if (choice == "1") //Wyświetlenia zawartości kolekcji
                 {
                     ShowMenu();
                     Coin.ShowCollection(Coin.GetCatalog());
                 }
-                else if (choice == "2")
+                else if (choice == "2") //Aktualizacja ilości posiadanych zasobów
                 {
                     try
                     {
@@ -135,7 +134,7 @@ namespace Collector
                         ShowBag(e.Message);
                     }
                 }
-                else if (choice == "3")
+                else if (choice == "3") //Wyświetlenie zawartości katalogów wycen numizmatów
                 {
                     try
                     {
@@ -147,7 +146,7 @@ namespace Collector
                         ShowBag(e.Message);
                     }
                 }
-                else if (choice == "4")
+                else if (choice == "4") //Dodawanie nowych katalogów i wycen monet
                 {
                     try
                     {
@@ -192,7 +191,7 @@ namespace Collector
                     string stan = "100";
                     ReadInputWithDefault(stan, "Moneta 1\nStan w ewidencji. Zatwierdź lub wprowadź aktualny stan: ");
                 }
-                else if (choice == "X" || choice == "x")
+                else if (choice == "X" || choice == "x") //Zakończenie pracy z aplikacją
                 {
                     Environment.Exit(0);
                 }
