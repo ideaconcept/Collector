@@ -13,8 +13,7 @@ namespace Collector
         public int Weight { get; }
         public string Material { get; }
 
-        void AddQuanity(string id, float grade);
-        void AddQuanity(string id, string grade);
+        public List<string[]> GetCollection();
 
         event CollectionUpdateDelegate CollectionUpdate;
 

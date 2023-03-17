@@ -21,10 +21,8 @@
         public string Year { get; }
         public string Publisher { get; }
 
-
-        public abstract void AddQuotation(float grade);
-
-        public abstract void AddQuotation(string grade);
+        public abstract List<string[]> GetCatalogCoins();
+        public abstract List<string[]> GetCatalogOdYear(string fileName);
 
         public abstract void AddCatalog(string catalogData);
     }

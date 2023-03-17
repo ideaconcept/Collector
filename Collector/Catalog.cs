@@ -22,7 +22,6 @@ namespace Collector
                 using (var writer = File.AppendText(Program.fileNameCatalog))
                 {
                     writer.WriteLine(catalogData);
-                    writer.WriteLineAsync();
                 }
             }
             if (CatalogAdded != null)
@@ -31,30 +30,44 @@ namespace Collector
             }
         }
 
-        public override void AddQuotation(float quotation)
+        public override List<string[]> GetCatalogCoins()
         {
-            if (QuotationAdded != null)
+            List<string[]> coinTable = new List<string[]>();
+            if (File.Exists(Program.fileNameCoinsList))
             {
-                QuotationAdded(this, new EventArgs());
+                using (var reader = File.OpenText(Program.fileNameCoinsList))
+                {
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        var dictionary = line.Split(';');
+                        coinTable.Add(dictionary);
+                        line = reader.ReadLine();
+                    }
+                }
             }
+            return coinTable;
         }
 
-        public override void AddQuotation(string quotation)
+        public override List<string[]> GetCatalogOdYear(string fileName)
         {
-            if (float.TryParse(quotation, out float result))
+            List<string[]> coinTable = new List<string[]>();
+            if (File.Exists(fileName))
             {
-                this.AddQuotation(result);
+                using (var reader = File.OpenText(fileName))
+                {
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        var dictionary = line.Split(';');
+                        coinTable.Add(dictionary);
+                        line = reader.ReadLine();
+                    }
+                }
             }
-            else
-            {
-                throw new Exception("Wprowadzona ilość nie jest dopuszczalną wartością.\n");
-            }
-
-            if (CatalogAdded != null)
-            {
-                CatalogAdded(this, new EventArgs());
-            }
+            return coinTable;
         }
+
         public static void ShowCatalog()
         {
             if (File.Exists(Program.fileNameCatalog))
@@ -63,8 +76,9 @@ namespace Collector
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("\nWykaz dostępnych katalogów wycen monet:\n\n");
+                    
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.Write("\tLp.\tNazwa\t\t\t\t\tRok\tWydawca\n");
+                    Console.WriteLine("\t{0,-3} {1,-35} {2,6} {3,-10}", "Lp.", "Nazwa", "Rok ", "Wydawca");
                     Console.WriteLine(("\t").PadRight(65, '-'));
                     Console.ResetColor();
 
@@ -72,15 +86,40 @@ namespace Collector
                     while (line != null)
                     {
                         var record = line.Split(';');
-                        foreach (var kv in record)
-                        {
-                            Console.Write($"\t{kv}");
-                        }
+                        Console.WriteLine("\t{0,-3} {1,-35} {2,6} {3,-10}", record[0], record[1], record[2], record[3]);
                         line = reader.ReadLine();
-                        Console.WriteLine("");
                     }
                     Console.WriteLine("\n");
                 }
+            }
+        }
+        
+        public static int RecordsOffCatalog()
+        {
+            if (File.Exists(Program.fileNameCatalog))
+            {
+                using (var reader = File.OpenText(Program.fileNameCatalog))
+                {
+                    
+                    var records = 1;
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        records++;
+                        line = reader.ReadLine();
+                    }
+                    return records;
+                }
+            }
+            {
+                return 0;
+            }
+        }
+
+        public static void AddCatalogFile(string name)
+        {
+            using (var writer = File.AppendText(name))
+            {
             }
         }
     }

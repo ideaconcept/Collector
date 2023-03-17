@@ -22,26 +22,6 @@ namespace Collector
         {
         }
 
-        public override void AddQuanity(string id, float quanity)
-        {          
-            if (CollectionUpdate != null)
-            {
-                CollectionUpdate(this, new EventArgs());
-            }
-        }
-
-        public override void AddQuanity(string id, string quanity)
-        {
-            if (float.TryParse(quanity, out float result))
-            {
-                this.AddQuanity(id, result);
-            }
-            else
-            {
-                throw new Exception("Wprowadzona ilość nie jest dopuszczalną wartością lub nie jest cyfrą.\n");
-            }
-        }
-
         public override Statistics GetStatistics()
         {
             var statistics = new Statistics();
@@ -59,7 +39,6 @@ namespace Collector
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("\nZawartość Twojej kolekcji:\n\n");
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
-
                     Console.WriteLine("\t{0,-8} {1,-35} {2,7} {3,-10} {4,8} {5,8} {6,8} {7,-10} {8,4}", "ID", "Nazwa", "Nominał", "Waluta", "Rok wyd.", "Średnica", "Waga (g)", "Materiał", "Liczba");
                     Console.WriteLine(("\t").PadRight(110, '-'));
                     Console.ResetColor();
@@ -85,7 +64,7 @@ namespace Collector
             }
         }
 
-        public static void ModifyRecord(string fileName, string oldData, string newData)
+        public static void ModifyCollectionRecord(string fileName, string oldData, string newData)
         {
             int lineNumber = 0;
             bool traced = false;
@@ -108,28 +87,8 @@ namespace Collector
                 }
             }
         }
-
-        public static List<string[]> GetCatalog()
-        {
-            //Załadowanie słownika monet do tablicy
-            List<string[]> coinTable = new List<string[]>();
-            if (File.Exists(Program.fileNameCoinsList))
-            {
-                using (var reader = File.OpenText(Program.fileNameCoinsList))
-                {
-                    var line = reader.ReadLine();
-                    while (line != null)
-                    {
-                        var dictionary = line.Split(';');
-                        coinTable.Add(dictionary);
-                        line = reader.ReadLine();
-                    }
-                }
-            }
-            return coinTable;
-        }
-        
-        public static List<string[]> GetCollection()
+      
+        public override List<string[]> GetCollection()
         {
             //Załadowanie kolekcji monet do tablicy
             List<string[]> coinCollection = new List<string[]>();

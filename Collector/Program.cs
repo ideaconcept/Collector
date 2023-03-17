@@ -3,6 +3,8 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Xml.Linq;
 using static Collector.CoinBase;
 
 namespace Collector
@@ -12,6 +14,7 @@ namespace Collector
         public const string fileNameCollection = "collection.txt";
         public const string fileNameCoinsList = "coins.txt";
         public const string fileNameCatalog = "catalog.txt";
+        private static string nextNumber;
 
         static void CatalogAdded(object sender, EventArgs args)
         {
@@ -50,19 +53,19 @@ namespace Collector
                 string choice = Console.ReadLine();
                 Console.ResetColor();
 
-                if (choice == "1") //Wyświetlenia zawartości kolekcji
+                if (choice == "1")
                 {
                     ShowMenu();
-                    Coin.ShowCollection(Coin.GetCatalog());
+                    Coin.ShowCollection(catalog.GetCatalogCoins());
                 }
-                else if (choice == "2") //Aktualizacja ilości posiadanych zasobów
+                else if (choice == "2")
                 {
                     try
                     {
                         ShowMenu();
-                        //Odczytania danych kolekcji, uzupełnienie ze słownika danych opisujących monety i wyświetlenie w celu aktualizacji danych
-                        List<string[]> coinTable = Coin.GetCatalog();
-                        List<string[]> coinCollection = Coin.GetCollection();
+
+                        List<string[]> coinTable = catalog.GetCatalogCoins();
+                        List<string[]> coinCollection = coin.GetCollection();
 
                         foreach (var record in coinCollection)
                         {
@@ -72,7 +75,9 @@ namespace Collector
                                 {
                                     Console.Clear();
                                     ShowMenu();
-                                    Console.WriteLine();
+                                    Console.ForegroundColor = ConsoleColor.Blue;
+                                    Console.WriteLine("\nAktualizacja danych dotyczących ilości egzemplarzy poszczególnych numizmatów: \n");
+
                                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                                     Console.Write("Identyfikator:");
                                     Console.ResetColor();
@@ -118,7 +123,7 @@ namespace Collector
                                     string oldRecord = record[0] + ";" + record[1];
                                     string newRecord = record[0] + ";" + newValue;
 
-                                    Coin.ModifyRecord(fileNameCollection, oldRecord, newRecord);
+                                    Coin.ModifyCollectionRecord(fileNameCollection, oldRecord, newRecord);
                                     Console.Clear();
                                     ShowMenu();
                                 }
@@ -146,34 +151,130 @@ namespace Collector
                         ShowBag(e.Message);
                     }
                 }
-                else if (choice == "4") //Dodawanie nowych katalogów i wycen monet
+                else if (choice == "4")
                 {
                     try
                     {
+                        Console.Clear();
+                        ShowMenu();
                         Console.WriteLine("\nDodać opis czynności\n");
-
                         Console.WriteLine("Wprowadź dane katalogu: ");
 
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("Nazwa: ");
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        var nameCatalog = Console.ReadLine();
-
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("Rok wydania: ");
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        var yearCatalog = Console.ReadLine();
-
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("Wydawca: ");
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        var publisherName = Console.ReadLine();
+                        string nameCatalog = GetDataFromUser("Nazwa: \t\t");
+                        string yearCatalog = GetDataFromUser("Rok wydania: \t");
+                        String publisherName = GetDataFromUser("Wydawca: \t");
 
                         Console.ResetColor();
                         Console.WriteLine("\n");
 
-                        var record = nameCatalog + ";" + yearCatalog + ";" + publisherName;
-                        catalog.AddCatalog(record);
+                        if (!string.IsNullOrEmpty(nameCatalog) && !string.IsNullOrEmpty(publisherName))
+                        {
+                            if ((int.TryParse(yearCatalog, out int result)))
+                            {
+                                string nextRecord = Catalog.RecordsOffCatalog().ToString();
+                                nextNumber = nextRecord;
+                                var record = nextRecord + ";" + nameCatalog + ";" + yearCatalog + ";" + publisherName;
+                                catalog.AddCatalog(record);
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                ShowMenu();
+                                ShowBag("Wprowadzony rok wydania katalogu nie jest cyfrą! Powtórz czynność dodana katalogu.\n");
+                            }
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            ShowMenu();
+                            ShowBag("Wprowadzone dane katalogu nie mogą być puste! Powtórz czynność dodana katalogu.\n");
+                        }
+                        
+                        string nameNewCatalog = "catalog_" + nextNumber + ".txt";
+                        Catalog.AddCatalogFile(nameNewCatalog);
+
+                        List<string[]> coinTable = catalog.GetCatalogCoins();
+                        foreach (var recordsOfDictionary in coinTable)
+                        {
+                            
+                            string newRecord = recordsOfDictionary[0] + ";0";
+
+                            using (var writer = File.AppendText(nameNewCatalog))
+                            {
+                                writer.WriteLine(newRecord);
+                            }
+                        }
+
+                        //Przeprowadzić aktualizację wyceny poszczególnych pozycji
+                        
+                        List<string[]> coinTableOfCatalog = catalog.GetCatalogOdYear(nameNewCatalog);
+
+                        foreach (var record in coinTableOfCatalog)
+                        {
+                            foreach (var recordsOfDictionary in coinTable)
+                            {
+                                if (record[0] == recordsOfDictionary[0])
+                                {
+                                    Console.Clear();
+                                    ShowMenu();
+                                    Console.ForegroundColor = ConsoleColor.Blue;
+                                    Console.WriteLine("\nAktualizacja wyceny numizmatów dla nowego katalogu wyceny: \n");
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.Write("Identyfikator:");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"\t\t{record[0]}");
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.Write("Nazwa:");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"\t\t\t{recordsOfDictionary[1]}");
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.Write("Nominał:");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"\t\t{recordsOfDictionary[2]}");
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.Write("Waluta:");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"\t\t\t{recordsOfDictionary[3]}");
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.Write("Rok wydania:");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"\t\t{recordsOfDictionary[4]}");
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.Write("Średnica:");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"\t\t{recordsOfDictionary[5]}");
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.Write("Waga:");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"\t\t\t{recordsOfDictionary[6]}");
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.Write("Materiał:");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"\t\t{recordsOfDictionary[7]}\n");
+                                    Console.ResetColor();
+
+                                    string newValue = ReadInputWithDefault(record[1], "Wprowadź wycenę monety wg katalogu: ");
+                                    string oldRecord = record[0] + ";" + record[1];
+                                    string newRecord = record[0] + ";" + newValue;
+
+                                    Coin.ModifyCollectionRecord(nameNewCatalog, oldRecord, newRecord);
+                                    Console.Clear();
+                                    ShowMenu();
+                                }
+                            }
+                        }
+
+                        //Console.Clear();
+                        //ShowMenu();
+
                     }
                     catch (Exception e)
                     {
@@ -188,16 +289,14 @@ namespace Collector
                 }
                 else if (choice == "7")
                 {
-                    string stan = "100";
-                    ReadInputWithDefault(stan, "Moneta 1\nStan w ewidencji. Zatwierdź lub wprowadź aktualny stan: ");
                 }
-                else if (choice == "X" || choice == "x") //Zakończenie pracy z aplikacją
+                else if (choice == "X" || choice == "x")
                 {
                     Environment.Exit(0);
                 }
                 else
                 {
-                    ShowBag("Wprowadzono złą wartość. Wybierz: 1, 2, 3, 4, 5, 6, 7 lub x aby zakończyć pracę z programem.\n");
+                    ShowBag("Wprowadzono złą wartość. Wybierz: 1, 2, 3, 4, 5, 6, 7 lub X aby zakończyć pracę z programem.\n");
                 }
             }
         }
@@ -236,13 +335,22 @@ namespace Collector
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("   X. Zakończ pracę programu");
             Console.ResetColor();
-            Console.WriteLine("====================================================================\n");
+            Console.WriteLine("====================================================================");
+        }
+
+        private static string GetDataFromUser(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(message);
+            Console.ForegroundColor = ConsoleColor.Gray;
+            string userInput = Console.ReadLine();
+            return userInput;
         }
 
         private static string ReadInputWithDefault(string defaultValue, string caret = "> ")
         {
-            Etykieta:
-            
+        Etykieta:
+
             Console.ForegroundColor = ConsoleColor.Yellow;
 
             List<char> buffer = defaultValue.ToCharArray().Take(Console.WindowWidth - caret.Length - 1).ToList();

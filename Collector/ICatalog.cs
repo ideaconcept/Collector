@@ -9,9 +9,10 @@ namespace Collector
         public string Year { get; }
         public string Publisher { get; }
 
-        void AddQuotation(float grade);
-        void AddQuotation(string grade);
         void AddCatalog(string catalogData);
+
+        public List<string[]> GetCatalogCoins();
+        public List<string[]> GetCatalogOdYear(string fileName);
 
         event CatalogAddDelegate CatalogAdded;
         event QuotationAddDelegate QuotationAdded;

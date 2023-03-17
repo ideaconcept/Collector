@@ -26,8 +26,7 @@
         public int Weight { get; }
         public string Material { get; }
 
-        public abstract void AddQuanity(string id, float grade);
-        public abstract void AddQuanity(string id, string grade);
+        public abstract List<string[]> GetCollection();
 
         public abstract Statistics GetStatistics();
 
