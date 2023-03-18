@@ -89,7 +89,6 @@ namespace Collector
                         Console.WriteLine("\t{0,-3} {1,-35} {2,6} {3,-10}", record[0], record[1], record[2], record[3]);
                         line = reader.ReadLine();
                     }
-                    Console.WriteLine("\n");
                 }
             }
         }

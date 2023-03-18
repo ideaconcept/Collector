@@ -4,6 +4,16 @@ namespace Collector
 {
     public class Statistics
     {
+        public int Quantity { get; private set; }
+        public int NumberOfCopies { get; private set; }
+
+        public Statistics()
+        {
+            this.Quantity = 0;
+            this.NumberOfCopies = 0;
+        }
+
+
         public static void CollectionValue(List<string[]> collectionTable)
         {
             byte counter = ((byte)Catalog.RecordsOffCatalog());
@@ -15,34 +25,29 @@ namespace Collector
                 using (var reader = File.OpenText(fileNamePriceList))
                 {
                     var line = reader.ReadLine();
+                    float value = 0;
                     while (line != null)
                     {
                         var record = line.Split(';');
-                        if (record[1] != "0")
+                        foreach (var recordsOfDictionary in collectionTable)
                         {
-                            foreach (var recordsOfDictionary in collectionTable)
+                            if (record[0] == recordsOfDictionary[0])
                             {
-                                if (record[0] == recordsOfDictionary[0])
+                                if (recordsOfDictionary[1] != "0")
                                 {
-                                    if (recordsOfDictionary[1] != "0")
-                                    {
-                                        float value = float.Parse(recordsOfDictionary[1]) * float.Parse(record[1]);
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        Console.WriteLine("\t{0,-8} {1,7} {2,-8} {3,7}", record[0], record[1], recordsOfDictionary[0], recordsOfDictionary[1]);
-                                        Console.WriteLine(value);
-                                    }
+                                    value = value + (float.Parse(recordsOfDictionary[1]) * float.Parse(record[1]));
                                 }
                             }
                         }
                         line = reader.ReadLine();
                     }
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write($"\tAktualna szacunkowa wartość Twojej kolekcji wynosi: ");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine($"{(String.Format("{0:C2}", value))}");
+                    Console.ResetColor();
                 }
             }
-
         }
     }
 }

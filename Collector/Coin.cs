@@ -25,6 +25,9 @@ namespace Collector
         public override Statistics GetStatistics()
         {
             var statistics = new Statistics();
+
+
+
             return statistics;
         }
 
@@ -57,7 +60,6 @@ namespace Collector
                         }
                         line = reader.ReadLine();
                     }
-                    Console.WriteLine("\n");
                 }
             }
         }

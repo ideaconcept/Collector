@@ -48,7 +48,7 @@ namespace Collector
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("Twój wybór: ");
+                Console.Write("\nTwój wybór: ");
                 Console.ResetColor();
 
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -57,8 +57,20 @@ namespace Collector
 
                 if (choice == "1")
                 {
-                    ShowMenu();
-                    Coin.ShowCollection(catalog.GetCatalogCoins());
+                    try
+                    {
+                        ShowMenu();
+                        Coin.ShowCollection(catalog.GetCatalogCoins());
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("\n\tW Twojej kolekcji znajduje się X monet w łacznej ilości Y egzemplarzy.");
+                        Console.ResetColor();
+                        Statistics.CollectionValue(coin.GetCollection());
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug(e.Message);
+                    }
                 }
                 else if (choice == "2")
                 {
@@ -209,12 +221,8 @@ namespace Collector
                 }
                 else if (choice == "5")
                 {
-                    Statistics.CollectionValue(coin.GetCollection());
                 }
                 else if (choice == "6")
-                {
-                }
-                else if (choice == "7")
                 {
                 }
                 else if (choice == "X" || choice == "x")
@@ -223,7 +231,7 @@ namespace Collector
                 }
                 else
                 {
-                    ShowBug("Wprowadzono złą wartość. Wybierz: 1, 2, 3, 4, 5, 6, 7 lub X aby zakończyć pracę z programem.\n");
+                    ShowBug("Wprowadzono złą wartość. Wybierz: 1, 2, 3, 4, 5, 6 lub X aby zakończyć pracę z programem.\n");
                 }
             }
         }
@@ -242,20 +250,16 @@ namespace Collector
             Console.WriteLine("====================================================================");
             Console.WriteLine("Wybierz jedną z poniższych opcji lub X aby zakończyć pracę programu:\n");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("   1. Wyświetl zasób posiadanej kolekcji");
+            Console.WriteLine("   1. Wyświetl informacje nt. posiadanej kolekcji i jej wartości");
             Console.WriteLine("   2. Zaktualizuj ilość posiadanych numizmatów");
             Console.WriteLine("   3. Wyświetl listę dostępnych katalogów wycen");
             Console.WriteLine("   4. Wprowadź nowy katalog wyceny monet");
             Console.ResetColor();
-            Console.Write("   5. Oblicz wartość kolekcji");
+            Console.Write("   5. Wyświetl informacje nt. zmian wartości kolekcji");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(" (Niekatywne)");
             Console.ResetColor();
-            Console.Write("   6. Wyświetl informacje nt. zmian wartości kolekcji");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(" (Niekatywne)");
-            Console.ResetColor();
-            Console.Write("   7. Wyświetl dane statystyczne nt. posiadanych monet");
+            Console.Write("   6. Wyświetl dane statystyczne nt. posiadanych monet");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(" (Niekatywne)");
             Console.ResetColor();
