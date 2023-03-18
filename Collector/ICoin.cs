@@ -13,6 +13,8 @@ namespace Collector
         public int Weight { get; }
         public string Material { get; }
 
+        void ShowCoinDetails(string id, string name, string denomination, string currency, string yearOfRelease, string diameter, string weight, string material);
+
         public List<string[]> GetCollection();
 
         event CollectionUpdateDelegate CollectionUpdate;

@@ -26,6 +26,8 @@
         public int Weight { get; }
         public string Material { get; }
 
+        public abstract void ShowCoinDetails(string id, string name, string denomination, string currency, string yearOfRelease, string diameter, string weight, string material);
+
         public abstract List<string[]> GetCollection();
 
         public abstract Statistics GetStatistics();

@@ -18,16 +18,18 @@ namespace Collector
 
         static void CatalogAdded(object sender, EventArgs args)
         {
-            Console.WriteLine("Dodano nowy katalog.\n");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("\nDodano nowy katalog oraz wycenę numizmatów.\n");
+            Console.ResetColor();
         }
         static void QuotationAdded(object sender, EventArgs args)
         {
-            Console.WriteLine("Dodano nową wycenę numizmatu.\n");
+            Console.WriteLine("\nDodano nową wycenę numizmatu.\n");
         }
         static void CollectionUpdate(object sender, EventArgs args)
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Zaktualizowano dane kolekcji numizmatów.\n");
+            Console.WriteLine("\nZaktualizowano dane kolekcji numizmatów.\n");
             Console.ResetColor();
         }
 
@@ -78,46 +80,8 @@ namespace Collector
                                     Console.ForegroundColor = ConsoleColor.Blue;
                                     Console.WriteLine("\nAktualizacja danych dotyczących ilości egzemplarzy poszczególnych numizmatów: \n");
 
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Identyfikator:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t{record[0]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Nazwa:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t\t{recordsOfDictionary[1]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Nominał:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t{recordsOfDictionary[2]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Waluta:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t\t{recordsOfDictionary[3]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Rok wydania:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t{recordsOfDictionary[4]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Średnica:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t{recordsOfDictionary[5]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Waga:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t\t{recordsOfDictionary[6]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Materiał:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t{recordsOfDictionary[7]}\n");
-                                    Console.ResetColor();
+                                    coin.ShowCoinDetails(record[0], recordsOfDictionary[1], recordsOfDictionary[2], recordsOfDictionary[3], recordsOfDictionary[4], recordsOfDictionary[5], recordsOfDictionary[6], recordsOfDictionary[7]);
+                                    Console.WriteLine();
 
                                     string newValue = ReadInputWithDefault(record[1], "Stan w ewidencji. Zatwierdź lub wprowadź aktualny stan: ");
                                     string oldRecord = record[0] + ";" + record[1];
@@ -136,10 +100,10 @@ namespace Collector
                     }
                     catch (Exception e)
                     {
-                        ShowBag(e.Message);
+                        ShowBug(e.Message);
                     }
                 }
-                else if (choice == "3") //Wyświetlenie zawartości katalogów wycen numizmatów
+                else if (choice == "3")
                 {
                     try
                     {
@@ -148,7 +112,7 @@ namespace Collector
                     }
                     catch (Exception e)
                     {
-                        ShowBag(e.Message);
+                        ShowBug(e.Message);
                     }
                 }
                 else if (choice == "4")
@@ -180,23 +144,23 @@ namespace Collector
                             {
                                 Console.Clear();
                                 ShowMenu();
-                                ShowBag("Wprowadzony rok wydania katalogu nie jest cyfrą! Powtórz czynność dodana katalogu.\n");
+                                ShowBug("Wprowadzony rok wydania katalogu nie jest cyfrą! Powtórz czynność dodana katalogu.\n");
                             }
                         }
                         else
                         {
                             Console.Clear();
                             ShowMenu();
-                            ShowBag("Wprowadzone dane katalogu nie mogą być puste! Powtórz czynność dodana katalogu.\n");
+                            ShowBug("Wprowadzone dane katalogu nie mogą być puste! Powtórz czynność dodana katalogu.\n");
                         }
-                        
+
                         string nameNewCatalog = "catalog_" + nextNumber + ".txt";
                         Catalog.AddCatalogFile(nameNewCatalog);
 
                         List<string[]> coinTable = catalog.GetCatalogCoins();
                         foreach (var recordsOfDictionary in coinTable)
                         {
-                            
+
                             string newRecord = recordsOfDictionary[0] + ";0";
 
                             using (var writer = File.AppendText(nameNewCatalog))
@@ -205,8 +169,6 @@ namespace Collector
                             }
                         }
 
-                        //Przeprowadzić aktualizację wyceny poszczególnych pozycji
-                        
                         List<string[]> coinTableOfCatalog = catalog.GetCatalogOdYear(nameNewCatalog);
 
                         foreach (var record in coinTableOfCatalog)
@@ -220,46 +182,8 @@ namespace Collector
                                     Console.ForegroundColor = ConsoleColor.Blue;
                                     Console.WriteLine("\nAktualizacja wyceny numizmatów dla nowego katalogu wyceny: \n");
 
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Identyfikator:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t{record[0]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Nazwa:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t\t{recordsOfDictionary[1]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Nominał:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t{recordsOfDictionary[2]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Waluta:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t\t{recordsOfDictionary[3]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Rok wydania:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t{recordsOfDictionary[4]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Średnica:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t{recordsOfDictionary[5]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Waga:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t\t{recordsOfDictionary[6]}");
-
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write("Materiał:");
-                                    Console.ResetColor();
-                                    Console.WriteLine($"\t\t{recordsOfDictionary[7]}\n");
-                                    Console.ResetColor();
+                                    coin.ShowCoinDetails(record[0], recordsOfDictionary[1], recordsOfDictionary[2], recordsOfDictionary[3], recordsOfDictionary[4], recordsOfDictionary[5], recordsOfDictionary[6], recordsOfDictionary[7]);
+                                    Console.WriteLine();
 
                                     string newValue = ReadInputWithDefault(record[1], "Wprowadź wycenę monety wg katalogu: ");
                                     string oldRecord = record[0] + ";" + record[1];
@@ -271,18 +195,21 @@ namespace Collector
                                 }
                             }
                         }
-
+                        if (CatalogAdded != null)
+                        {
+                            CatalogAdded(coin, new EventArgs());
+                        }
                         //Console.Clear();
                         //ShowMenu();
-
                     }
                     catch (Exception e)
                     {
-                        ShowBag(e.Message);
+                        ShowBug(e.Message);
                     }
                 }
                 else if (choice == "5")
                 {
+                    Statistics.CollectionValue(coin.GetCollection());
                 }
                 else if (choice == "6")
                 {
@@ -296,15 +223,15 @@ namespace Collector
                 }
                 else
                 {
-                    ShowBag("Wprowadzono złą wartość. Wybierz: 1, 2, 3, 4, 5, 6, 7 lub X aby zakończyć pracę z programem.\n");
+                    ShowBug("Wprowadzono złą wartość. Wybierz: 1, 2, 3, 4, 5, 6, 7 lub X aby zakończyć pracę z programem.\n");
                 }
             }
         }
 
-        private static void ShowBag(string bag)
+        private static void ShowBug(string bug)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"\nWystąpił błąd: {bag}");
+            Console.WriteLine($"\nWystąpił błąd: {bug}");
             Console.ResetColor();
         }
 
@@ -416,13 +343,13 @@ namespace Collector
             {
                 if (result < 0)
                 {
-                    ShowBag("Wprowadzona ilość musi być równa lub większa od 0 (zera).\n");
+                    ShowBug("Wprowadzona ilość musi być równa lub większa od 0 (zera).\n");
                     goto Etykieta;
                 }
             }
             else
             {
-                ShowBag("Wprowadzona ilość nie jest dopuszczalną wartością lub nie jest cyfrą.\n");
+                ShowBug("Wprowadzona ilość nie jest dopuszczalną wartością lub nie jest cyfrą.\n");
                 goto Etykieta;
             }
             Console.Write(Environment.NewLine);

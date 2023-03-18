@@ -30,8 +30,6 @@ namespace Collector
 
         public static void ShowCollection(List<string[]> coinTable)
         {
-
-            //Odczytania danych kolekcji, uzupełnienie ze słownika danych opisujących monety i wyświetlenie
             if (File.Exists(Program.fileNameCollection))
             {
                 using (var reader = File.OpenText(Program.fileNameCollection))
@@ -87,10 +85,53 @@ namespace Collector
                 }
             }
         }
-      
+
+        public override void ShowCoinDetails(string id, string name, string denomination, string currency, string yearOfRelease, string diameter, string weight, string material)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Identyfikator:");
+            Console.ResetColor();
+            Console.WriteLine($"\t\t{id}");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Nazwa:");
+            Console.ResetColor();
+            Console.WriteLine($"\t\t\t{name}");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Nominał:");
+            Console.ResetColor();
+            Console.WriteLine($"\t\t{denomination}");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Waluta:");
+            Console.ResetColor();
+            Console.WriteLine($"\t\t\t{currency}");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Rok wydania:");
+            Console.ResetColor();
+            Console.WriteLine($"\t\t{yearOfRelease}");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Średnica:");
+            Console.ResetColor();
+            Console.WriteLine($"\t\t{diameter}");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Waga:");
+            Console.ResetColor();
+            Console.WriteLine($"\t\t\t{weight}");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Materiał:");
+            Console.ResetColor();
+            Console.WriteLine($"\t\t{material}\n");
+            Console.ResetColor();
+        }
+
         public override List<string[]> GetCollection()
         {
-            //Załadowanie kolekcji monet do tablicy
             List<string[]> coinCollection = new List<string[]>();
             if (File.Exists(Program.fileNameCollection))
             {
