@@ -22,7 +22,8 @@
         public string Publisher { get; }
 
         public abstract List<string[]> GetCatalogCoins();
-        public abstract List<string[]> GetCatalogOdYear(string fileName);
+        public abstract List<string[]> GetCatalogOfYear(string fileName);
+        public abstract List<string[]> GetListOfCatalogs();
 
         public abstract void AddCatalog(string catalogData);
     }

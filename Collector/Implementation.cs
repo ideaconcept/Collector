@@ -19,6 +19,7 @@
                 using (var writer = File.AppendText(fileNameCatalog))
                 {
                     writer.WriteLine("1;Katalog polskich monet obiegowych;2019;Fischer");
+                    writer.WriteLine("2;Katalog polskich monet obiegowych;2020;Fischer");
                 }
                 //Wyceny numizmatów
                 using (var writer = File.AppendText("catalog_1.txt"))
@@ -27,6 +28,14 @@
                     writer.WriteLine("K(20)006;130");
                     writer.WriteLine("K(50)001;200");
                     writer.WriteLine("OB(2)221;4");
+                }
+
+                using (var writer = File.AppendText("catalog_2.txt"))
+                {
+                    writer.WriteLine("K(10)130;110");
+                    writer.WriteLine("K(20)006;150");
+                    writer.WriteLine("K(50)001;235");
+                    writer.WriteLine("OB(2)221;4,5");
                 }
             }
 

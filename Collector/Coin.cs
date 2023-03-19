@@ -8,7 +8,7 @@ namespace Collector
     {
         public override event CollectionUpdateDelegate CollectionUpdate;
 
-        public List<string[]> coinTable = new List<string[]>();
+        //public List<string[]> coinTable = new();
 
         public Coin(string id,
                     string name,
@@ -20,15 +20,6 @@ namespace Collector
                     string material)
             : base(id, name, denomination, currency, yearofrelease, diameter, weight, material)
         {
-        }
-
-        public override Statistics GetStatistics()
-        {
-            var statistics = new Statistics();
-
-
-
-            return statistics;
         }
 
         public static void ShowCollection(List<string[]> coinTable)
@@ -134,7 +125,7 @@ namespace Collector
 
         public override List<string[]> GetCollection()
         {
-            List<string[]> coinCollection = new List<string[]>();
+            List<string[]> coinCollection = new ();
             if (File.Exists(Program.fileNameCollection))
             {
                 using (var reader = File.OpenText(Program.fileNameCollection))

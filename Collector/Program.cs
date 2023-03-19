@@ -14,7 +14,7 @@ namespace Collector
         public const string fileNameCollection = "collection.txt";
         public const string fileNameCoinsList = "coins.txt";
         public const string fileNameCatalog = "catalog.txt";
-        private static string nextNumber;
+        private static string? nextNumber;
 
         static void CatalogAdded(object sender, EventArgs args)
         {
@@ -61,11 +61,7 @@ namespace Collector
                     {
                         ShowMenu();
                         Coin.ShowCollection(catalog.GetCatalogCoins());
-
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("\n\tW Twojej kolekcji znajduje się X monet w łacznej ilości Y egzemplarzy.");
-                        Console.ResetColor();
-                        Statistics.CollectionValue(coin.GetCollection());
+                        Statistics.CollectionStatistics(coin.GetCollection());
                     }
                     catch (Exception e)
                     {
@@ -96,8 +92,9 @@ namespace Collector
                                     Console.WriteLine();
 
                                     string newValue = ReadInputWithDefault(record[1], "Stan w ewidencji. Zatwierdź lub wprowadź aktualny stan: ");
+
                                     string oldRecord = record[0] + ";" + record[1];
-                                    string newRecord = record[0] + ";" + newValue;
+                                    string newRecord = record[0] + ";" + (byte)float.Parse(newValue);
 
                                     Coin.ModifyCollectionRecord(fileNameCollection, oldRecord, newRecord);
                                     Console.Clear();
@@ -147,7 +144,7 @@ namespace Collector
                         {
                             if ((int.TryParse(yearCatalog, out int result)))
                             {
-                                string nextRecord = Catalog.RecordsOffCatalog().ToString();
+                                string nextRecord = Catalog.RecordsInCatalog().ToString();
                                 nextNumber = nextRecord;
                                 var record = nextRecord + ";" + nameCatalog + ";" + yearCatalog + ";" + publisherName;
                                 catalog.AddCatalog(record);
@@ -181,7 +178,7 @@ namespace Collector
                             }
                         }
 
-                        List<string[]> coinTableOfCatalog = catalog.GetCatalogOdYear(nameNewCatalog);
+                        List<string[]> coinTableOfCatalog = catalog.GetCatalogOfYear(nameNewCatalog);
 
                         foreach (var record in coinTableOfCatalog)
                         {
@@ -221,9 +218,56 @@ namespace Collector
                 }
                 else if (choice == "5")
                 {
+                    try
+                    {
+                        ShowMenu();
+                        Statistics.ValueChanges(coin.GetCollection(), catalog.GetListOfCatalogs());
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug(e.Message);
+                    }
                 }
                 else if (choice == "6")
                 {
+                    try
+                    {
+                        ShowMenu();
+                        Catalog.ShowCoins(catalog.GetCatalogCoins());
+
+                        while (true)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write("\nPodaj numer porządkowy monety dla której mają zostać wyświetlone informacje szczegółowe lub q aby zakończyć: ");
+                            Console.ResetColor();
+
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            string choice2 = Console.ReadLine();
+                            Console.ResetColor();
+
+                            var liczbaRekordow = catalog.GetCatalogCoins().Count;
+
+
+                            if (choice2 == "q" || choice2 == "Q")
+                            {
+                                Console.Clear();
+                                ShowMenu();
+                                break;
+                            }
+                            else if ((int)float.Parse(choice2) <= liczbaRekordow)
+                            {
+                                Statistics.ChangingValueCoins((int)float.Parse(choice2), catalog.GetCatalogCoins());
+                            }
+                            else
+                            {
+                                ShowBug("Wprowadzono złą wartość. Podaj numer porządkowy lub Q aby wrócić do menu głównego.\n");
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug(e.Message);
+                    }
                 }
                 else if (choice == "X" || choice == "x")
                 {
@@ -249,21 +293,12 @@ namespace Collector
             Console.WriteLine("                  Witamy w programie Kolekcjoner:");
             Console.WriteLine("====================================================================");
             Console.WriteLine("Wybierz jedną z poniższych opcji lub X aby zakończyć pracę programu:\n");
-            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("   1. Wyświetl informacje nt. posiadanej kolekcji i jej wartości");
             Console.WriteLine("   2. Zaktualizuj ilość posiadanych numizmatów");
             Console.WriteLine("   3. Wyświetl listę dostępnych katalogów wycen");
             Console.WriteLine("   4. Wprowadź nowy katalog wyceny monet");
-            Console.ResetColor();
-            Console.Write("   5. Wyświetl informacje nt. zmian wartości kolekcji");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(" (Niekatywne)");
-            Console.ResetColor();
-            Console.Write("   6. Wyświetl dane statystyczne nt. posiadanych monet");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(" (Niekatywne)");
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("   5. Wyświetl informacje nt. zmian wartości kolekcji");
+            Console.WriteLine("   6. Wyświetl informacje nt. zmian wartości monet");
             Console.WriteLine("   X. Zakończ pracę programu");
             Console.ResetColor();
             Console.WriteLine("====================================================================");

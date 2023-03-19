@@ -18,7 +18,5 @@ namespace Collector
         public List<string[]> GetCollection();
 
         event CollectionUpdateDelegate CollectionUpdate;
-
-        Statistics GetStatistics();
     }
 }

@@ -12,7 +12,8 @@ namespace Collector
         void AddCatalog(string catalogData);
 
         public List<string[]> GetCatalogCoins();
-        public List<string[]> GetCatalogOdYear(string fileName);
+        public List<string[]> GetCatalogOfYear(string fileName);
+        public List<string[]> GetListOfCatalogs();
 
         event CatalogAddDelegate CatalogAdded;
         event QuotationAddDelegate QuotationAdded;
