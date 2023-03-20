@@ -31,8 +31,8 @@ namespace Collector
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("\nZawartość Twojej kolekcji:\n\n");
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine("\t{0,-8} {1,-35} {2,7} {3,-10} {4,8} {5,8} {6,8} {7,-10} {8,4}", "ID", "Nazwa", "Nominał", "Waluta", "Rok wyd.", "Średnica", "Waga (g)", "Materiał", "Liczba");
-                    Console.WriteLine(("\t").PadRight(110, '-'));
+                    Console.WriteLine("\t{0,-11} {1,-35} {2,7} {3,-10} {4,8} {5,8} {6,8} {7,-10} {8,4}", "ID", "Nazwa", "Nominał", "Waluta", "Rok wyd.", "Średnica", "Waga (g)", "Materiał", "Liczba");
+                    Console.WriteLine(("\t").PadRight(113, '-'));
                     Console.ResetColor();
 
                     var line = reader.ReadLine();
@@ -45,7 +45,7 @@ namespace Collector
                             {
                                 if (record[0] == recordsOfDictionary[0])
                                 {
-                                    Console.WriteLine("\t{0,-8} {1,-35} {2,7} {3,-10} {4,8} {5,8} {6,8} {7,-10} {8,4}", record[0], recordsOfDictionary[1], recordsOfDictionary[2], recordsOfDictionary[3], recordsOfDictionary[4], recordsOfDictionary[5], recordsOfDictionary[6], recordsOfDictionary[7], record[1]);
+                                    Console.WriteLine("\t{0,-11} {1,-35} {2,7} {3,-10} {4,8} {5,8:N2} {6,8:N2} {7,-10} {8,4}", record[0], recordsOfDictionary[1], recordsOfDictionary[2], recordsOfDictionary[3], recordsOfDictionary[4], float.Parse(recordsOfDictionary[5]), float.Parse(recordsOfDictionary[6]), recordsOfDictionary[7], record[1]);
                                 }
                             }
                         }
@@ -109,12 +109,12 @@ namespace Collector
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.Write("Średnica:");
             Console.ResetColor();
-            Console.WriteLine($"\t\t{diameter}");
+            Console.WriteLine("\t\t{0,-8:N2}", float.Parse(diameter));
 
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write("Waga:");
+            Console.Write("Waga (g):");
             Console.ResetColor();
-            Console.WriteLine($"\t\t\t{weight}");
+            Console.WriteLine("\t\t{0,-8:N2}", float.Parse(weight));
 
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.Write("Materiał:");

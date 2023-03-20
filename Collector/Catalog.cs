@@ -154,7 +154,7 @@ namespace Collector
 
             foreach (var recordsOfCoins in coinTable)
             {
-                Console.WriteLine("\t{0, -3} {1,-13} {2,-35} {3,7} {4,-10} {5,8} {6,8} {7,8} {8,-10}", counter, recordsOfCoins[0], recordsOfCoins[1], recordsOfCoins[2], recordsOfCoins[3], recordsOfCoins[4], recordsOfCoins[5], recordsOfCoins[6], recordsOfCoins[7]);
+                Console.WriteLine("\t{0, -3} {1,-13} {2,-35} {3,7} {4,-10} {5,8} {6,8:N2} {7,8:N2} {8,-10}", counter, recordsOfCoins[0], recordsOfCoins[1], recordsOfCoins[2], recordsOfCoins[3], recordsOfCoins[4], float.Parse(recordsOfCoins[5]), float.Parse(recordsOfCoins[6]), recordsOfCoins[7]);
                 counter++;
             }
         }

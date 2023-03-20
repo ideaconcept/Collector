@@ -1,13 +1,4 @@
-﻿using Collector;
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Xml.Linq;
-using static Collector.CoinBase;
-
-namespace Collector
+﻿namespace Collector
 {
     internal class Program
     {
@@ -91,7 +82,7 @@ namespace Collector
                                     coin.ShowCoinDetails(record[0], recordsOfDictionary[1], recordsOfDictionary[2], recordsOfDictionary[3], recordsOfDictionary[4], recordsOfDictionary[5], recordsOfDictionary[6], recordsOfDictionary[7]);
                                     Console.WriteLine();
 
-                                    string newValue = ReadInputWithDefault(record[1], "Stan w ewidencji. Zatwierdź lub wprowadź aktualny stan: ");
+                                    string newValue = ReadInputWithDefault(record[1], 0, "Stan w ewidencji. Zatwierdź lub wprowadź aktualny stan: ");
 
                                     string oldRecord = record[0] + ";" + record[1];
                                     string newRecord = record[0] + ";" + (byte)float.Parse(newValue);
@@ -130,12 +121,14 @@ namespace Collector
                     {
                         Console.Clear();
                         ShowMenu();
-                        Console.WriteLine("\nDodać opis czynności\n");
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine("\nNależy wprowadzić dane opisujące dodawany nowy katalog wyceny nmizmatów oraz w kolejnym kroku wycenę poszczególnych numizmatów zgodnie z informacją opublikowaną w katalogu.\n");
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Wprowadź dane katalogu: ");
 
                         string nameCatalog = GetDataFromUser("Nazwa: \t\t");
                         string yearCatalog = GetDataFromUser("Rok wydania: \t");
-                        String publisherName = GetDataFromUser("Wydawca: \t");
+                        string publisherName = GetDataFromUser("Wydawca: \t");
 
                         Console.ResetColor();
                         Console.WriteLine("\n");
@@ -194,7 +187,7 @@ namespace Collector
                                     coin.ShowCoinDetails(record[0], recordsOfDictionary[1], recordsOfDictionary[2], recordsOfDictionary[3], recordsOfDictionary[4], recordsOfDictionary[5], recordsOfDictionary[6], recordsOfDictionary[7]);
                                     Console.WriteLine();
 
-                                    string newValue = ReadInputWithDefault(record[1], "Wprowadź wycenę monety wg katalogu: ");
+                                    string newValue = ReadInputWithDefault(record[1], 1, "Wprowadź wycenę monety wg katalogu: ");
                                     string oldRecord = record[0] + ";" + record[1];
                                     string newRecord = record[0] + ";" + newValue;
 
@@ -208,8 +201,6 @@ namespace Collector
                         {
                             CatalogAdded(coin, new EventArgs());
                         }
-                        //Console.Clear();
-                        //ShowMenu();
                     }
                     catch (Exception e)
                     {
@@ -239,28 +230,35 @@ namespace Collector
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.Write("\nPodaj numer porządkowy monety dla której mają zostać wyświetlone informacje szczegółowe lub q aby zakończyć: ");
-                            Console.ResetColor();
-
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            string choice2 = Console.ReadLine();
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            string? choice2 = Console.ReadLine();
                             Console.ResetColor();
 
                             var liczbaRekordow = catalog.GetCatalogCoins().Count;
 
-
-                            if (choice2 == "q" || choice2 == "Q")
+                            if (float.TryParse(choice2, out float result))
                             {
-                                Console.Clear();
-                                ShowMenu();
-                                break;
-                            }
-                            else if ((int)float.Parse(choice2) <= liczbaRekordow)
-                            {
-                                Statistics.ChangingValueCoins((int)float.Parse(choice2), catalog.GetCatalogCoins());
+                                if ((int)result <= liczbaRekordow)
+                                {
+                                    Statistics.ChangingValueCoins((int)float.Parse(choice2), catalog.GetCatalogCoins(), catalog.GetListOfCatalogs());
+                                }
+                                else
+                                {
+                                    ShowBug("Wprowadzono złą wartość. Podaj numer porządkowy lub Q aby wrócić do menu głównego.\n");
+                                }
                             }
                             else
                             {
-                                ShowBug("Wprowadzono złą wartość. Podaj numer porządkowy lub Q aby wrócić do menu głównego.\n");
+                                if (choice2 == "q" || choice2 == "Q")
+                                {
+                                    Console.Clear();
+                                    ShowMenu();
+                                    break;
+                                }
+                                else
+                                {
+                                    ShowBug("Wprowadzono złą wartość. Podaj numer porządkowy lub Q aby wrócić do menu głównego.\n");
+                                }
                             }
                         }
                     }
@@ -290,8 +288,11 @@ namespace Collector
         private static void ShowMenu()
         {
             Console.Clear();
+            Console.ForegroundColor= ConsoleColor.Blue;
             Console.WriteLine("                  Witamy w programie Kolekcjoner:");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("====================================================================");
+            Console.ResetColor();
             Console.WriteLine("Wybierz jedną z poniższych opcji lub X aby zakończyć pracę programu:\n");
             Console.WriteLine("   1. Wyświetl informacje nt. posiadanej kolekcji i jej wartości");
             Console.WriteLine("   2. Zaktualizuj ilość posiadanych numizmatów");
@@ -300,8 +301,9 @@ namespace Collector
             Console.WriteLine("   5. Wyświetl informacje nt. zmian wartości kolekcji");
             Console.WriteLine("   6. Wyświetl informacje nt. zmian wartości monet");
             Console.WriteLine("   X. Zakończ pracę programu");
-            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("====================================================================");
+            Console.ResetColor();
         }
 
         private static string GetDataFromUser(string message)
@@ -313,7 +315,7 @@ namespace Collector
             return userInput;
         }
 
-        private static string ReadInputWithDefault(string defaultValue, string caret = "> ")
+        private static string ReadInputWithDefault(string defaultValue, int minimum, string caret = "> ")
         {
         Etykieta:
 
@@ -380,9 +382,9 @@ namespace Collector
 
             if (float.TryParse(new string(buffer.ToArray()), out float result))
             {
-                if (result < 0)
+                if (result < minimum)
                 {
-                    ShowBug("Wprowadzona ilość musi być równa lub większa od 0 (zera).\n");
+                    ShowBug($"Wprowadzona liczba musi być większa od {minimum}.\n");
                     goto Etykieta;
                 }
             }
