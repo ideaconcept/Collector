@@ -13,10 +13,6 @@
             Console.WriteLine("\nDodano nowy katalog oraz wycenę numizmatów.\n");
             Console.ResetColor();
         }
-        static void QuotationAdded(object sender, EventArgs args)
-        {
-            Console.WriteLine("\nDodano nową wycenę numizmatu.\n");
-        }
         static void CollectionUpdate(object sender, EventArgs args)
         {
             Console.ForegroundColor = ConsoleColor.Blue;
@@ -28,10 +24,9 @@
         {
             var coin = new Coin("", "", 0, "", 0, 0, 0, "");
             var catalog = new Catalog("", "", "", "");
-
-            coin.CollectionUpdate += CollectionUpdate;
             catalog.CatalogAdded += CatalogAdded;
-            catalog.QuotationAdded += QuotationAdded;
+            coin.CollectionUpdate += CollectionUpdate;
+
 
             Implementation.Implementations();
             ShowMenu();

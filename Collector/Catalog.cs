@@ -5,7 +5,6 @@ namespace Collector
     public class Catalog : CatalogBase
     {
         public override event CatalogAddDelegate CatalogAdded;
-        public override event QuotationAddDelegate QuotationAdded;
 
         public Catalog(string id,
                        string name,

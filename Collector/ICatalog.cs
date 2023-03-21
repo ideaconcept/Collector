@@ -16,6 +16,5 @@ namespace Collector
         public List<string[]> GetListOfCatalogs();
 
         event CatalogAddDelegate CatalogAdded;
-        event QuotationAddDelegate QuotationAdded;
     }
 }

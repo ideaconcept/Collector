@@ -5,9 +5,6 @@
         public delegate void CatalogAddDelegate(object sender, EventArgs args);
         public abstract event CatalogAddDelegate CatalogAdded;
 
-        public delegate void QuotationAddDelegate(object sender, EventArgs args);
-        public abstract event QuotationAddDelegate QuotationAdded;
-
         public CatalogBase(string id, string name, string year, string publisher)
         {
             this.ID = id;

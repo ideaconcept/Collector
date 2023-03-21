@@ -8,8 +8,6 @@ namespace Collector
     {
         public override event CollectionUpdateDelegate CollectionUpdate;
 
-        //public List<string[]> coinTable = new();
-
         public Coin(string id,
                     string name,
                     int denomination,
